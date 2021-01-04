@@ -13,7 +13,10 @@ func publish(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "publish")
 	vars := mux.Vars(r)
 	fmt.Println("publish : " + r.RemoteAddr + " : " + vars["name"])
-	os.RemoveAll(fmt.Sprintf("/var/www/hls/%s/", vars["name"]))
+	os.RemoveAll(fmt.Sprintf("/var/www/hls/%s.m3u8", vars["name"]))
+	os.RemoveAll(fmt.Sprintf("/var/www/hls/%s_low/", vars["name"]))
+	os.RemoveAll(fmt.Sprintf("/var/www/hls/%s_mid/", vars["name"]))
+	os.RemoveAll(fmt.Sprintf("/var/www/hls/%s_hi/", vars["name"]))
 }
 
 func publishDone(w http.ResponseWriter, r *http.Request) {
