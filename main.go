@@ -21,9 +21,9 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fmt.Println("publish_done : " + r.RemoteAddr + " : " + vars["name"])
 
-	writeLineToFile(fmt.Sprintf("/var/www/hls/$s/$name_low/index.m3u8", vars["name"]), "#EXT-X-ENDLIST")
-	writeLineToFile(fmt.Sprintf("/var/www/hls/$s/$name_mid/index.m3u8", vars["name"]), "#EXT-X-ENDLIST")
-	writeLineToFile(fmt.Sprintf("/var/www/hls/$s/$name_hi/index.m3u8", vars["name"]), "#EXT-X-ENDLIST")
+	writeLineToFile(fmt.Sprintf("/var/www/hls/%s/%s_low/index.m3u8", vars["name"]), "#EXT-X-ENDLIST")
+	writeLineToFile(fmt.Sprintf("/var/www/hls/%s/%s_mid/index.m3u8", vars["name"]), "#EXT-X-ENDLIST")
+	writeLineToFile(fmt.Sprintf("/var/www/hls/%s/%s_hi/index.m3u8", vars["name"]), "#EXT-X-ENDLIST")
 }
 
 func writeLineToFile(filename string, text string) {
