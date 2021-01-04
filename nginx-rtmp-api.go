@@ -30,7 +30,7 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 }
 
 func writeLineToFile(filename string, text string) {
-	fmt.Println(fmt.Sprintf("Writing %s to %s", filename, text))
+	fmt.Println(fmt.Sprintf("Writing %s to %s", text, filename))
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		panic(err)
