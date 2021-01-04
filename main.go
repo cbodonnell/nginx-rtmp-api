@@ -12,12 +12,31 @@ func publish(w http.ResponseWriter, r *http.Request){
     fmt.Fprintf(w, "publish")
     vars := mux.Vars(r)
     fmt.Println("publish : " + r.RemoteAddr + " : " + vars["name"])
+    os.RemoveAll(fmt.Sprintf("/var/www/hls/%s/", vars["name"]))
 }
 
 func publishDone(w http.ResponseWriter, r *http.Request){
     fmt.Fprintf(w, "publish_done")
     vars := mux.Vars(r)
     fmt.Println("publish_done : " + r.RemoteAddr + " : " + vars["name"])
+
+    if, err := os.OpenFile(fmt.Sprintf("/var/www/hls/$s/$name_low/index.m3u8", vars["name"]), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+    writeLineToFile(fmt.Sprintf("/var/www/hls/$s/$name_low/index.m3u8", vars["name"]), "#EXT-X-ENDLIST")
+    writeLineToFile(fmt.Sprintf("/var/www/hls/$s/$name_mid/index.m3u8", vars["name"]), "#EXT-X-ENDLIST")
+    writeLineToFile(fmt.Sprintf("/var/www/hls/$s/$name_hi/index.m3u8", vars["name"]), "#EXT-X-ENDLIST")
+}
+
+func writeLineToFile(filename string, text string) {
+    if, err := os.OpenFile(filename), os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+    if err != nil {
+        panic(err)
+    }
+
+    defer f.Close()
+
+    if _, err = f.WriteString(text); err != nil {
+        panic(err)
+    }
 }
 
 func main() {
