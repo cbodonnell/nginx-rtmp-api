@@ -34,7 +34,7 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 	if _, err := os.Stat(savedPath); os.IsNotExist(err) {
 		os.Mkdir(savedPath, os.ModeDir)
 	}
-	err = gorecurcopy.CopyDirectory("/var/www/hls", savedPath)
+	err := gorecurcopy.CopyDirectory("/var/www/hls", savedPath)
 	if err != nil {
 		panic(err)
 	}
