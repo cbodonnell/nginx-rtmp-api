@@ -28,7 +28,7 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 	// TODO: Get stream id to name folder
 	id := 1
 
-	savedPath := fmt.Sprintf("/var/www/hls/%s/%d", vars["name"], id)
+	savedPath := fmt.Sprintf("/var/www/vod/%s/%d", vars["name"], id)
 
 	// if _, err := os.Stat(savedPath); os.IsNotExist(err) {
 	// 	fmt.Println("Creating dir: " + savedPath)
