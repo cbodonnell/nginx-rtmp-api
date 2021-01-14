@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/plus3it/gorecurcopy"
@@ -27,7 +28,13 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: Get stream id to name folder
 	id := 1
-	err := gorecurcopy.CopyDirectory("/var/www/hls", fmt.Sprintf("/var/www/hls/%s/%d", vars["name"], id))
+
+	savedPath := fmt.Sprintf("/var/www/hls/%s/%d", vars["name"], id)
+
+	if _, err := os.Stat(savedPath); os.IsNotExist(err) {
+		os.Mkdir(savedPath, os.ModeDir)
+	}
+	err = gorecurcopy.CopyDirectory("/var/www/hls", savedPath)
 	if err != nil {
 		panic(err)
 	}
