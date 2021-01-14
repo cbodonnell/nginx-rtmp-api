@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/plus3it/gorecurcopy"
+	"github.com/otiai10/copy"
 )
 
 func publish(w http.ResponseWriter, r *http.Request) {
@@ -31,11 +30,11 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 
 	savedPath := fmt.Sprintf("/var/www/hls/%s/%d", vars["name"], id)
 
-	if _, err := os.Stat(savedPath); os.IsNotExist(err) {
-		fmt.Println("Creating dir: " + savedPath)
-		os.Mkdir(savedPath, os.ModeDir)
-	}
-	err := gorecurcopy.CopyDirectory("/var/www/hls", savedPath)
+	// if _, err := os.Stat(savedPath); os.IsNotExist(err) {
+	// 	fmt.Println("Creating dir: " + savedPath)
+	// 	os.Mkdir(savedPath, os.ModeDir)
+	// }
+	err := copy.Copy("/var/www/hls", savedPath)
 	if err != nil {
 		panic(err)
 	}
