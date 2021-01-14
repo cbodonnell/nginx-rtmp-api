@@ -32,6 +32,7 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 	savedPath := fmt.Sprintf("/var/www/hls/%s/%d", vars["name"], id)
 
 	if _, err := os.Stat(savedPath); os.IsNotExist(err) {
+		fmt.Println("Creating dir: " + savedPath)
 		os.Mkdir(savedPath, os.ModeDir)
 	}
 	err := gorecurcopy.CopyDirectory("/var/www/hls", savedPath)
