@@ -1,42 +1,47 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/otiai10/copy"
 )
 
-func publish(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "publish")
-	vars := mux.Vars(r)
-	fmt.Println("publish : " + r.RemoteAddr + " : " + vars["name"])
+// --- Configuration --- //
 
-	err := RemoveContents("/var/www/hls")
+var config Configuration
+
+func getConfig(ENV string) Configuration {
+	file, err := os.Open(fmt.Sprintf("config.%s.json", ENV))
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-}
-
-func publishDone(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "publish_done")
-	vars := mux.Vars(r)
-	fmt.Println("publish_done : " + r.RemoteAddr + " : " + vars["name"])
-
-	// TODO: Get stream id to name folder
-	id := 1
-
-	savedPath := fmt.Sprintf("/var/www/vod/%s/%d", vars["name"], id)
-
-	err := copy.Copy("/var/www/hls", savedPath)
+	defer file.Close()
+	decoder := json.NewDecoder(file)
+	var config Configuration
+	err = decoder.Decode(&config)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
+	return config
 }
 
 func main() {
+	// Get configuration
+	ENV := os.Getenv("ENV")
+	if ENV == "" {
+		ENV = "dev"
+	}
+	fmt.Println(fmt.Sprintf("Running in ENV: %s", ENV))
+	config = getConfig(ENV)
+
+	db = connectDb(config.Db)
+	defer db.Close()
+	pingDb(db)
+
 	r := mux.NewRouter()
 
 	r.HandleFunc("/publish/{name}", publish)

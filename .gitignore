@@ -1,2 +1,3 @@
+config.*.json
 nginx-rtmp-api
 nginx-rtmp-api.exe
