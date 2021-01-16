@@ -1,33 +1,31 @@
 package main
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 	"log"
-	
-	// TODO: See about replacing with: https://github.com/jackc/pgx
-	_ "github.com/lib/pq"
+	"os"
+
+	"github.com/jackc/pgx/v4"
 )
 
-// db instance
-var db *sql.DB
-
 // connect to db
-func connectDb(s DataSource) *sql.DB {
+func connectDb(s DataSource) *pgx.Conn {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		s.Host, s.Port, s.User, s.Password, s.Dbname)
-	db, err := sql.Open("postgres", psqlInfo)
+	db, err := pgx.Connect(context.Background(), psqlInfo)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
 	}
-	fmt.Printf("Connecting to %s as %s\n", s.Dbname, s.User)
+	fmt.Printf("Connected to %s as %s\n", s.Dbname, s.User)
 	return db
 }
 
 // ping db
-func pingDb(db *sql.DB) {
-	err := db.Ping()
+func pingDb(db *pgx.Conn) {
+	err := db.Ping(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}

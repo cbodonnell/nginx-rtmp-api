@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-// Removes contents from a directory
+// RemoveContents -  Removes contents from a directory
 func RemoveContents(dir string) error {
 	d, err := os.Open(dir)
 	if err != nil {

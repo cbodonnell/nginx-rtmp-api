@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -38,8 +39,8 @@ func main() {
 	fmt.Println(fmt.Sprintf("Running in ENV: %s", ENV))
 	config = getConfig(ENV)
 
-	db = connectDb(config.Db)
-	defer db.Close()
+	db := connectDb(config.Db)
+	defer db.Close(context.Background())
 	pingDb(db)
 
 	r := mux.NewRouter()
