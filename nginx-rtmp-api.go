@@ -30,28 +30,11 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 
 	savedPath := fmt.Sprintf("/var/www/vod/%s/%d", vars["name"], id)
 
-	// if _, err := os.Stat(savedPath); os.IsNotExist(err) {
-	// 	fmt.Println("Creating dir: " + savedPath)
-	// 	os.Mkdir(savedPath, os.ModeDir)
-	// }
 	err := copy.Copy("/var/www/hls", savedPath)
 	if err != nil {
 		panic(err)
 	}
 }
-
-// func writeLineToFile(filename string, text string) {
-// 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	defer f.Close()
-
-// 	if _, err = f.WriteString(text); err != nil {
-// 		panic(err)
-// 	}
-// }
 
 func main() {
 	r := mux.NewRouter()
