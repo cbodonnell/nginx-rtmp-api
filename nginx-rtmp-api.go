@@ -42,5 +42,7 @@ func main() {
 	r.HandleFunc("/publish/{name}", publish)
 	r.HandleFunc("/publish_done/{name}", publishDone)
 
-	log.Fatal(http.ListenAndServe(":9000", r))
+	port := 9000
+	fmt.Println(fmt.Sprintf("Serving on port %d", port))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 }
