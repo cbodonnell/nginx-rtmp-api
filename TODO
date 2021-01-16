@@ -1,0 +1,21 @@
+** ENDPOINTS **
+
+publish/{key}
+	get user associated with stream key
+	create new stream record for user with status "live=true"
+
+publish_done/{key}
+	get user associated with stream key
+	set stream record for user to status "live=false" returning id
+	move stream files from user's live directory to subdir (named by id) of user's vod directory
+
+stream/{user_id}
+    get user's live stream (if any)
+        if live stream return that id
+        else return most recent vod
+
+archive/{user_id}
+    get all user's streams where "live=false"
+
+archive/{user_id}/{id}
+    get user's stream where "live=false" and "id={id}"
