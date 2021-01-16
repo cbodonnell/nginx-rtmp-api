@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        GOROOT = "${tool type: 'go', name: 'go1.15.6.linux-armv6l'}/go"
+        GOROOT = "${tool type: 'go', name: 'go1.15.6'}/go"
     }
     stages {
         stage('build') {
