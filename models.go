@@ -5,6 +5,7 @@ type Configuration struct {
 	Debug          bool          `json:"debug"`
 	Port	       int           `json:"port"`
 	Db             DataSource    `json:"db"`
+	Filesystem     bool          `json:"filesystem"`
 }
 
 // DataSource struct

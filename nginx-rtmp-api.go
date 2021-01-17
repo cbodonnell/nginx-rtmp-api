@@ -39,7 +39,7 @@ func main() {
 	fmt.Println(fmt.Sprintf("Running in ENV: %s", ENV))
 	config = getConfig(ENV)
 
-	db := connectDb(config.Db)
+	db = connectDb(config.Db)
 	defer db.Close(context.Background())
 	pingDb(db)
 

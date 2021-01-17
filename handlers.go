@@ -1,11 +1,10 @@
 package main
 
 import (
-	"net/http"
 	"fmt"
-	
+	"net/http"
+
 	"github.com/gorilla/mux"
-	"github.com/otiai10/copy"
 )
 
 func publish(w http.ResponseWriter, r *http.Request) {
@@ -13,9 +12,16 @@ func publish(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fmt.Println("publish : " + r.RemoteAddr + " : " + vars["name"])
 
-	err := RemoveContents("/var/www/hls")
+	_, err := startStream(vars["name"])
 	if err != nil {
-		panic(err)
+		badRequest(w, err)
+		return
+	}
+
+	err = RemoveContents("/var/www/hls")
+	if err != nil {
+		internalServerError(w, err)
+		return
 	}
 }
 
@@ -24,13 +30,13 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fmt.Println("publish_done : " + r.RemoteAddr + " : " + vars["name"])
 
-	// TODO: Get stream id to name folder
-	id := 1
-
+	id, err := stopStream(vars["name"])
 	savedPath := fmt.Sprintf("/var/www/vod/%s/%d", vars["name"], id)
+	fmt.Println("Saving stream to ", savedPath)
 
-	err := copy.Copy("/var/www/hls", savedPath)
+	err = CopyDirectory("/var/www/hls", savedPath)
 	if err != nil {
-		panic(err)
+		internalServerError(w, err)
+		return
 	}
 }

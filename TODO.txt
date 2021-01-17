@@ -1,10 +1,10 @@
 ** ENDPOINTS **
 
-publish/{key}
+publish/{key} [DONE]
 	get user associated with stream key
 	create new stream record for user with status "live=true"
 
-publish_done/{key}
+publish_done/{key} [DONE]
 	get user associated with stream key
 	set stream record for user to status "live=false" returning id
 	move stream files from user's live directory to subdir (named by id) of user's vod directory
