@@ -9,10 +9,9 @@ publish_done/{key} [DONE]
 	set stream record for user to status "live=false" returning id
 	move stream files from user's live directory to subdir (named by id) of user's vod directory
 
-stream/{user_id}
+stream/{user_id} [DONE]
     get user's live stream (if any)
-        if live stream return that id
-        else return most recent vod
+        return most recent record (check live and evaluate url client-side)
 
 archive/{user_id}
     get all user's streams where "live=false"
