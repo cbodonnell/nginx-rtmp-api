@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -41,45 +39,4 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 		internalServerError(w, err)
 		return
 	}
-}
-
-// TODO: Move to a separate public api w/ auth
-func getStream(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fmt.Println("get_stream : " + r.RemoteAddr + " : " + vars["user_id"])
-
-	userID, err := strconv.Atoi(vars["user_id"])
-	if err != nil {
-		badRequest(w, err)
-		return
-	}
-
-	stream, err := queryStream(userID)
-	if err != nil {
-		badRequest(w, err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(stream)
-}
-
-func getStreams(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fmt.Println("get_streams : " + r.RemoteAddr + " : " + vars["user_id"])
-
-	userID, err := strconv.Atoi(vars["user_id"])
-	if err != nil {
-		badRequest(w, err)
-		return
-	}
-
-	streams, err := queryStreams(userID)
-	if err != nil {
-		badRequest(w, err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(streams)
 }

@@ -1,10 +1,5 @@
 package main
 
-import (
-	"database/sql"
-	"time"
-)
-
 // Configuration struct
 type Configuration struct {
 	Debug      bool       `json:"debug"`
@@ -22,12 +17,12 @@ type DataSource struct {
 	Dbname   string `json:"dbname"`
 }
 
-// Stream struct
-type Stream struct {
-	ID        int          `json:"id"`
-	Title     string       `json:"title"`
-	UserID    int          `json:"user_id"`
-	Live      bool         `json:"live"`
-	StartTime time.Time    `json:"start_time"`
-	EndTime   sql.NullTime `json:"end_time"`
-}
+// // Stream struct
+// type Stream struct {
+// 	ID        int          `json:"id"`
+// 	Title     string       `json:"title"`
+// 	UserID    int          `json:"user_id"`
+// 	Live      bool         `json:"live"`
+// 	StartTime time.Time    `json:"start_time"`
+// 	EndTime   sql.NullTime `json:"end_time"`
+// }

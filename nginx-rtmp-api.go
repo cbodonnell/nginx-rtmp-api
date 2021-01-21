@@ -47,9 +47,6 @@ func main() {
 
 	r.HandleFunc("/publish/{name}", publish)
 	r.HandleFunc("/publish_done/{name}", publishDone)
-	// TODO: Move to a separate public api w/ auth
-	r.HandleFunc("/stream/{user_id}", getStream)
-	r.HandleFunc("/streams/{user_id}", getStreams)
 
 	port := 9000
 	fmt.Println(fmt.Sprintf("Serving on port %d", port))
