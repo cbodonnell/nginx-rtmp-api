@@ -34,35 +34,49 @@ func pingDb(db *pgx.Conn) {
 	}
 }
 
-func startStream(key string) (int, error) {
+func startStream(key string) (Stream, error) {
 	sql := `INSERT INTO streams (title, user_id, live, start_time)
 	VALUES (
 		(SELECT username FROM users WHERE stream_key = $1) || '''s Stream ' || NOW(),
 		(SELECT id FROM users WHERE stream_key = $1),
 		true,
 		NOW()
-	) RETURNING id;`
+	) RETURNING *;`
 
-	var id int
-	err := db.QueryRow(context.Background(), sql, key).Scan(&id)
+	var stream Stream
+	err := db.QueryRow(context.Background(), sql, key).Scan(
+		&stream.ID,
+		&stream.Title,
+		&stream.Live,
+		&stream.StartTime,
+		&stream.EndTime,
+		&stream.UserID,
+	)
 	if err != nil {
-		return id, err
+		return stream, err
 	}
-	return id, nil
+	return stream, nil
 }
 
-func stopStream(key string) (int, error) {
+func stopStream(key string) (Stream, error) {
 	sql := `UPDATE streams
 	SET live = false, end_time = NOW()
 	WHERE (
 		user_id = (SELECT id FROM users WHERE stream_key = $1)
 		AND live = true
-	) RETURNING id;`
+	) RETURNING *;`
 
-	var id int
-	err := db.QueryRow(context.Background(), sql, key).Scan(&id)
+	var stream Stream
+	err := db.QueryRow(context.Background(), sql, key).Scan(
+		&stream.ID,
+		&stream.Title,
+		&stream.Live,
+		&stream.StartTime,
+		&stream.EndTime,
+		&stream.UserID,
+	)
 	if err != nil {
-		return id, err
+		return stream, err
 	}
-	return id, nil
+	return stream, nil
 }

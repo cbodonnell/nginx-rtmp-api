@@ -30,9 +30,9 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fmt.Println("publish_done : " + r.RemoteAddr + " : " + vars["name"])
 
-	id, err := stopStream(vars["name"])
-	savedPath := fmt.Sprintf("/var/www/vod/%s/%d", vars["name"], id)
-	fmt.Println("Saving stream to ", savedPath)
+	stream, err := stopStream(vars["name"])
+	savedPath := fmt.Sprintf("/var/www/vod/%d/%d", stream.UserID, stream.ID)
+	fmt.Println("Saving stream to " + savedPath)
 
 	err = CopyDirectory("/var/www/hls", savedPath)
 	if err != nil {
