@@ -19,11 +19,11 @@ func publish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = RemoveContents("/var/www/hls")
-	if err != nil {
-		internalServerError(w, err)
-		return
-	}
+	// err = RemoveContents("/var/www/hls")
+	// if err != nil {
+	// 	internalServerError(w, err)
+	// 	return
+	// }
 }
 
 func publishDone(w http.ResponseWriter, r *http.Request) {
