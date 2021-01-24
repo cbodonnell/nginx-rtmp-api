@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -29,6 +30,8 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "publish_done")
 	vars := mux.Vars(r)
 	fmt.Println("publish_done : " + r.RemoteAddr + " : " + vars["name"])
+
+	time.Sleep(12 * time.Second)
 
 	stream, err := stopStream(vars["name"])
 	savedPath := fmt.Sprintf("/var/www/vod/%d/%d", stream.UserID, stream.ID)
