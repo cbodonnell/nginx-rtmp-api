@@ -18,6 +18,12 @@ func publish(w http.ResponseWriter, r *http.Request) {
 		badRequest(w, err)
 		return
 	}
+
+	err = RemoveContents("/var/www/hls")
+	if err != nil {
+		internalServerError(w, err)
+		return
+	}
 }
 
 func publishDone(w http.ResponseWriter, r *http.Request) {
@@ -32,12 +38,6 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Saving stream to " + savedPath)
 
 	err = CopyDirectory("/var/www/hls", savedPath)
-	if err != nil {
-		internalServerError(w, err)
-		return
-	}
-
-	err = RemoveContents("/var/www/hls")
 	if err != nil {
 		internalServerError(w, err)
 		return
