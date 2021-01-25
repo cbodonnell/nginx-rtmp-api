@@ -9,7 +9,7 @@ import (
 )
 
 func publish(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "publish")
+	fmt.Fprintln(w, "publish")
 	vars := mux.Vars(r)
 	fmt.Println("publish : " + r.RemoteAddr + " : " + vars["name"])
 
@@ -18,16 +18,10 @@ func publish(w http.ResponseWriter, r *http.Request) {
 		badRequest(w, err)
 		return
 	}
-
-	err = RemoveContents("/var/www/hls")
-	if err != nil {
-		internalServerError(w, err)
-		return
-	}
 }
 
 func publishDone(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "publish_done")
+	fmt.Fprintln(w, "publish_done")
 	vars := mux.Vars(r)
 	fmt.Println("publish_done : " + r.RemoteAddr + " : " + vars["name"])
 
@@ -38,6 +32,12 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Saving stream to " + savedPath)
 
 	err = CopyDirectory("/var/www/hls", savedPath)
+	if err != nil {
+		internalServerError(w, err)
+		return
+	}
+
+	err = RemoveContents("/var/www/hls")
 	if err != nil {
 		internalServerError(w, err)
 		return
