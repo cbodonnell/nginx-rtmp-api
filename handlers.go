@@ -43,3 +43,21 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func clearStreams(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "admin/clear_streams")
+	vars := mux.Vars(r)
+	fmt.Println("admin/clear_streams : " + r.RemoteAddr + " : " + vars["name"])
+
+	err := deleteStreams(vars["name"])
+	if err != nil {
+		badRequest(w, err)
+		return
+	}
+
+	err = RemoveContents("/var/www/vod/" + vars["name"])
+	if err != nil {
+		internalServerError(w, err)
+		return
+	}
+}
