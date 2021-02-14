@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -47,15 +48,21 @@ func publishDone(w http.ResponseWriter, r *http.Request) {
 func clearStreams(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "admin/clear_streams")
 	vars := mux.Vars(r)
-	fmt.Println("admin/clear_streams : " + r.RemoteAddr + " : " + vars["name"])
+	fmt.Println("admin/clear_streams : " + r.RemoteAddr + " : " + vars["user_id"])
 
-	err := deleteStreams(vars["name"])
+	userID, err := strconv.Atoi(vars["user_id"])
 	if err != nil {
 		badRequest(w, err)
 		return
 	}
 
-	err = RemoveContents("/var/www/vod/" + vars["name"])
+	err = deleteStreams(userID)
+	if err != nil {
+		badRequest(w, err)
+		return
+	}
+
+	err = RemoveContents("/var/www/vod/" + vars["user_id"])
 	if err != nil {
 		internalServerError(w, err)
 		return

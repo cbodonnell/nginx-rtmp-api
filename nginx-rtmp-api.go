@@ -47,8 +47,8 @@ func main() {
 
 	r.HandleFunc("/publish/{name}", publish)
 	r.HandleFunc("/publish_done/{name}", publishDone)
-	
-	r.HandleFunc("/admin/clear_streams/{name}", clearStreams)
+
+	r.HandleFunc("/admin/clear_streams/{user_id}", clearStreams)
 
 	port := 9000
 	fmt.Println(fmt.Sprintf("Serving on port %d", port))

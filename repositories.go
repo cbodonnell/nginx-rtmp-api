@@ -81,11 +81,11 @@ func stopStream(key string) (Stream, error) {
 	return stream, nil
 }
 
-func deleteStreams(key string) error {
+func deleteStreams(userID int) error {
 	sql := `DELETE FROM streams
-	WHERE user_id = (SELECT id FROM users WHERE stream_key = $1);`
+	WHERE user_id = $1;`
 
-	_, err := db.Exec(context.Background(), sql, key)
+	_, err := db.Exec(context.Background(), sql, userID)
 	if err != nil {
 		return err
 	}
