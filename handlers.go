@@ -12,9 +12,9 @@ import (
 func publish(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "publish")
 	vars := mux.Vars(r)
-	fmt.Println("publish : " + r.RemoteAddr + " : " + vars["name"])
+	fmt.Println("publish : " + r.RemoteAddr + " : " + vars["uuid"])
 
-	_, err := startStream(vars["name"])
+	_, err := startStream(vars["uuid"])
 	if err != nil {
 		badRequest(w, err)
 		return
@@ -30,11 +30,11 @@ func publish(w http.ResponseWriter, r *http.Request) {
 func publishDone(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "publish_done")
 	vars := mux.Vars(r)
-	fmt.Println("publish_done : " + r.RemoteAddr + " : " + vars["name"])
+	fmt.Println("publish_done : " + r.RemoteAddr + " : " + vars["uuid"])
 
 	time.Sleep(12 * time.Second)
 
-	stream, err := stopStream(vars["name"])
+	stream, err := stopStream(vars["uuid"])
 	savedPath := fmt.Sprintf("/var/www/vod/%d/%d", stream.UserID, stream.ID)
 	fmt.Println("Saving stream to " + savedPath)
 

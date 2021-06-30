@@ -45,8 +45,8 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/publish/{name}", publish)
-	r.HandleFunc("/publish_done/{name}", publishDone)
+	r.HandleFunc("/publish/{uuid}", publish)
+	r.HandleFunc("/publish_done/{uuid}", publishDone)
 
 	r.HandleFunc("/admin/clear_streams/{user_id}", clearStreams)
 

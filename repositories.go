@@ -34,17 +34,17 @@ func pingDb(db *pgx.Conn) {
 	}
 }
 
-func startStream(key string) (Stream, error) {
+func startStream(uuid string) (Stream, error) {
 	sql := `INSERT INTO streams (title, user_id, live, start_time)
 	VALUES (
-		(SELECT username FROM users WHERE stream_key = $1) || '''s Stream ' || NOW(),
-		(SELECT id FROM users WHERE stream_key = $1),
+		(SELECT username FROM users WHERE uuid = $1) || '''s Stream ' || NOW(),
+		(SELECT id FROM users WHERE uuid = $1),
 		true,
 		NOW()
 	) RETURNING *;`
 
 	var stream Stream
-	err := db.QueryRow(context.Background(), sql, key).Scan(
+	err := db.QueryRow(context.Background(), sql, uuid).Scan(
 		&stream.ID,
 		&stream.Title,
 		&stream.Live,
@@ -58,16 +58,16 @@ func startStream(key string) (Stream, error) {
 	return stream, nil
 }
 
-func stopStream(key string) (Stream, error) {
+func stopStream(uuid string) (Stream, error) {
 	sql := `UPDATE streams
 	SET live = false, end_time = NOW()
 	WHERE (
-		user_id = (SELECT id FROM users WHERE stream_key = $1)
+		user_id = (SELECT id FROM users WHERE uuid = $1)
 		AND live = true
 	) RETURNING *;`
 
 	var stream Stream
-	err := db.QueryRow(context.Background(), sql, key).Scan(
+	err := db.QueryRow(context.Background(), sql, uuid).Scan(
 		&stream.ID,
 		&stream.Title,
 		&stream.Live,
